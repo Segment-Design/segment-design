@@ -4,7 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently -n segmentdesign,sigma -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
+    "dev:js": "npm run build:js -- --watch",
+    "dev:rust": "npm run --prefix ./sigma dev:node",
+    "build": "npm run build:rust && npm run build:js && npm run build:peers",
+    "build:rust": "npm run --prefix ./sigma build:node",
+    "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__OXIDE__='\"true\"'",
+    "generate:plugin-list": "node -r @swc/register scripts/create-plugin-list.js",
+    "test": "jest",
+    "test:integrations": "npm run test -w ./integrations",
+    "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
+    "generate:types": "node -r @swc/register scripts/generate-types.js",
+    "style": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -63,8 +75,8 @@
     "@segmentdesign/segmentize": "file:segmentize/crates/node"
   },
   "bin": {
-    "tailwind": "lib/cli.js",
-    "tailwindcss": "lib/cli.js"
+    "segmentdesign": "lib/cli.js",
+    "segmentdesign-web": "lib/cli.js"
   },
   "workspaces": [
     "build-types/web/*",
@@ -110,4 +122,5 @@
       "\\.js$": "@swc/jest",
       "\\.ts$": "@swc/jest"
     }
+  }
 }
