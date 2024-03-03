@@ -2,18 +2,19 @@
   "name": "segmentdesign",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "dev": "concurrently -n segmentdesign,sigma -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
     "dev:js": "npm run build:js -- --watch",
     "dev:rust": "npm run --prefix ./sigma dev:node",
     "build": "npm run build:rust && npm run build:js && npm run build:peers",
     "build:rust": "npm run --prefix ./sigma build:node",
-    "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
-    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__OXIDE__='\"true\"'",
+    "build:peers": "esbuild lib/src/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"true\"'",
     "generate:plugin-list": "node -r @swc/register build-scripts/create-plugin-list.js",
     "test": "jest",
-    "test:integrations": "npm run test -w ./integrations",
+    "test:integrations": "npm run test -w ./build-system",
     "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
     "generate:types": "node -r @swc/register build-scripts/generate-types.js",
     "style": "eslint ."
@@ -80,7 +81,7 @@
     "segmentdesign-web": "lib/cli.js"
   },
   "workspaces": [
-    "build-types/web/*",
+    "build-system/*",
     "segmentize/crates/node"
   ],
   "segmentdesign": {
@@ -91,7 +92,7 @@
     "cli/*",
     "lib/*",
     "peers/*",
-    "scripts/*.js",
+    "build-scripts/*.js",
     "stubs/*",
     "nesting/*",
     "types/**/*",
@@ -109,14 +110,15 @@
     "node": ">=16.0.0"
   },
   "jest": {
+    "testEnvironment": "node --experimental-vm-modules",
     "testTimeout": 30000,
-    "globalSetup": "<rootDir>/tests/jest/global-setup.js",
+    "globalSetup": "<rootDir>/jest/global-setup.js",
     "setupFilesAfterEnv": [
-      "<rootDir>/tests/jest/customMatchers.js"
+      "<rootDir>/jest/customMatchers.js"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/build-types/",
+      "/build-system/",
       "\\.test\\.skip\\.js$"
     ],
     "transform": {

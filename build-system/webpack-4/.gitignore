@@ -1,0 +1,4 @@
+dist/
+node_modules/
+!segmentdesign.config.js
+!index.html

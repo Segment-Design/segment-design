@@ -1,0 +1,9 @@
+/cli
+/lib
+/docs
+/peers
+/tests/fixtures/cli-utils.js
+/stubs/*
+/src/corePluginList.js
+/sigma/crates/node/index.js
+/sigma/crates/node/index.d.ts

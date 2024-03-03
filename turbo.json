@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "//#build": {
+      "outputs": ["lib/**", "peers/**", "types/generated/**"],
+      "inputs": ["src/**", "sigma/**", "nesting/**", "sigma-node-api-shim/**", "types/**"]
+    },
+    "test": {
+      "env": ["SIGMA"],
+      "dependsOn": ["//#build"]
+    },
+    "//#test": {
+      "env": ["SIGMA"],
+      "dependsOn": ["//#build"],
+      "inputs": ["tests/**"]
+    },
+    "//#style": {
+      "inputs": ["**/*.js", "**/*.ts"]
+    }
+  }
+}

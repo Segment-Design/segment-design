@@ -1,0 +1,23 @@
+{
+  "name": "@segmentdesign/build-system-segmentdesign-cli",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "NODE_ENV=production node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css",
+    "test": "jest --runInBand --forceExit"
+  },
+  "dependencies": {
+    "segmentdesign": "file:../../"
+  },
+  "jest": {
+    "testTimeout": 10000,
+    "displayName": "segmentdesign CLI",
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ],
+    "transform": {
+      "\\.js$": "@swc/jest",
+      "\\.ts$": "@swc/jest"
+    }
+  }
+}
