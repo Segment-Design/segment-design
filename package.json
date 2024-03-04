@@ -14,7 +14,7 @@
     "dev:rust": "npm run --prefix ./sigma dev:node",
     "dev:js": "npm run build:js -- --watch",
     "build:rust": "npm run --prefix ./sigma build:node",
-    "build:js": "npm run generate:plugin-list && swc src -d lib --strip-leading-paths --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"true\"'",
+    "build:js": "npm run generate:plugin-list && swc src -d lib --strip-leading-paths --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"true\"'",
     "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "generate:plugin-list": "node -r @swc/register build-scripts/create-plugin-list.js",
     "generate:types": "node -r @swc/register build-scripts/generate-types.js"
