@@ -1,6 +1,6 @@
 {
   "name": "segmentdesign",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Beta version of css engine",
   "license": "MIT",
   "main": "lib/index.js",
