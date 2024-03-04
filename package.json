@@ -1,6 +1,6 @@
 {
-  "name": "SegmentDesign",
-  "version": "1.0.1",
+  "name": "segmentdesign",
+  "version": "1.0.3",
   "description": "Beta version of css engine",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
