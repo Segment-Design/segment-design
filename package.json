@@ -14,8 +14,8 @@
   },
   "scripts": {
     "prebuild": "npm run generate && rimraf lib",
-    "build": "swc src -d lib --strip-leading-paths --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"false\"'",
-    "postbuild": "esbuild lib/src/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "build": "swc src --out-dir lib --copy-files --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"false\"'",
+    "postbuild": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
     "rebuild-fixtures": "npm run build && node -r @swc/register build-scripts/rebuildFixtures.js",
     "style": "eslint .",
     "pretest": "npm run generate",
