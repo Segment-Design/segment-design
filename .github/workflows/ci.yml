@@ -1,0 +1,76 @@
+name: CI — Sigma
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  CACHE_PREFIX: sigma
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ env.CACHE_PREFIX }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Cargo already skips downloading dependencies if they already exist
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Cache the `sigma` Rust build
+      - name: Cache sigma build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./sigma/target/
+            ./sigma/crates/node/*.node
+            ./sigma/crates/node/index.js
+            ./sigma/crates/node/index.d.ts
+          key: ${{ runner.os }}-sigma-${{ hashFiles('./sigma/crates/**/*') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build SegmentDesign
+        run: npx turbo run build --filter=//
+
+      - name: Test
+        run: |
+          npx turbo run test --filter=// || \
+          npx turbo run test --filter=// || \
+          npx turbo run test --filter=// || exit 1
+
+      - name: Lint
+        run: npx turbo run style --filter=//

@@ -1,29 +1,29 @@
 {
-  "name": "segmentdesign",
-  "version": "1.0.0",
-  "description": "",
+  "name": "SegmmentDesign",
+  "version": "1.0.1",
+  "description": "Beta version of css engine",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "concurrently -n segmentdesign,sigma -c green,yellow 'npm run dev:js' 'npm run dev:rust'",
-    "dev:js": "npm run build:js -- --watch",
-    "dev:rust": "npm run --prefix ./sigma dev:node",
     "build": "npm run build:rust && npm run build:js && npm run build:peers",
-    "build:rust": "npm run --prefix ./sigma build:node",
-    "build:peers": "esbuild lib/src/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
-    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"true\"'",
-    "generate:plugin-list": "node -r @swc/register build-scripts/create-plugin-list.js",
     "test": "jest",
     "test:integrations": "npm run test -w ./build-system",
+    "style": "eslint .",
     "prepublishOnly": "npm install --force && npm run build && npm run generate:types",
-    "generate:types": "node -r @swc/register build-scripts/generate-types.js",
-    "style": "eslint ."
+    "dev:rust": "npm run --prefix ./sigma dev:node",
+    "dev:js": "npm run build:js -- --watch",
+    "build:rust": "npm run --prefix ./sigma build:node",
+    "build:js": "npm run generate:plugin-list && swc src --out-dir lib --copy-files --delete-dir-on-start --config jsc.transform.optimizer.globals.vars.__SIGMA__='\"true\"'",
+    "build:peers": "esbuild lib/cli-peer-dependencies.js --bundle --platform=node --outfile=peers/index.js --define:process.env.CSS_TRANSFORMER_WASM=false",
+    "generate:plugin-list": "node -r @swc/register build-scripts/create-plugin-list.js",
+    "generate:types": "node -r @swc/register build-scripts/generate-types.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Segment-Design/segment-design.git"
   },
-  "author": "",
+  "author": "@stuffincode - Riaz Ahamed <https://riazahamed.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Segment-Design/segment-design/issues"
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@alloc/quick-lru": "^5.2.0",
-    "@segmentdesign/segmentize": "file:segmentize/crates/node",
+    "@segmentdesign/sigma": "file:sigma/crates/node",
     "arg": "^5.0.2",
     "browserslist": "^4.23.0",
     "chokidar": "^3.6.0",
