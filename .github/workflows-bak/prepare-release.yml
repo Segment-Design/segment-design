@@ -36,7 +36,7 @@ jobs:
 
       - name: Get release notes
         run: |
-          RELEASE_NOTES=$(node ./scripts/release-notes.js)
+          RELEASE_NOTES=$(node ./build-scripts/release-notes.js)
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -49,7 +49,7 @@ jobs:
 
       - name: Use the `stable` engine
         run: |
-          node ./scripts/swap-engines.js
+          node ./build-scripts/swap-engines.js
 
       - name: Install dependencies
         run: npm install

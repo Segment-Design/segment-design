@@ -35,7 +35,7 @@ jobs:
 
       - name: Use the `stable` engine
         run: |
-          node ./scripts/swap-engines.js
+          node ./build-scripts/swap-engines.js
 
       - name: Cache node_modules
         uses: actions/cache@v3
